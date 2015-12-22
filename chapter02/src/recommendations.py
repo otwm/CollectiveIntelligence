@@ -1,5 +1,5 @@
 # A dictionary of movie critics and their ratings of a small
-# ¹«ºñ Á¤º¸
+# ë°ì´í„°
 critics = {'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
                          'Just My Luck': 3.0, 'Superman Returns': 3.5, 'You, Me and Dupree': 2.5,
                          'The Night Listener': 3.0},
@@ -21,10 +21,10 @@ critics = {'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
 from math import sqrt
 
 
-# ¼±È£µµ À¯»ç °è»ê(À¯Å¬¸®µğ¾È)
-# @param prefs Á¤º¸
-# @param person1 »ç¶÷1
-# @param person2 »ç¶÷2
+# ì„ í˜¸ë„ ê³„ì‚°(ìœ í´ë¦¬ë””ì•ˆ)
+# @param prefs ë°ì´í„°
+# @param person1 ì‚¬ëŒ1
+# @param person2 ì‚¬ëŒ2
 # @return result
 def sim_distance(prefs, person1, person2):
     si = {}
@@ -38,10 +38,10 @@ def sim_distance(prefs, person1, person2):
     return 1 / (1 + sqrt(sum_of_squares))
 
 
-# ¼±È£µµ À¯»ç °è»ê(ÇÇ¾î½¼)
-# @param prefs Á¤º¸
-# @param person1 »ç¶÷1
-# @param person2 »ç¶÷2
+# ì„ í˜¸ë„ ê³„ì‚°(í”¼ì–´ìŠ¨)
+# @param prefs ë°ì´í„°
+# @param person1 ì‚¬ëŒ1
+# @param person2 ì‚¬ëŒ2
 # @return result
 def sim_peason(prefs, p1, p2):
     si = {}
@@ -99,3 +99,14 @@ def getRecommendations(prefs, person, similarity=sim_peason):
     rankings.sort()
     rankings.reverse()
     return rankings
+
+
+def transformPrefs(prefs):
+    result = {}
+    for person in prefs:
+        for item in prefs[person]:
+            result.setdefault(item,{})
+            result[item][person] = prefs[person][item]
+
+    return result
+
