@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # A dictionary of movie critics and their ratings of a small
 # 데이터
 critics = {'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
@@ -105,8 +107,7 @@ def transformPrefs(prefs):
     result = {}
     for person in prefs:
         for item in prefs[person]:
-            result.setdefault(item,{})
+            result.setdefault(item, {})
             result[item][person] = prefs[person][item]
 
     return result
-
