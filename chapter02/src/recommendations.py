@@ -23,44 +23,63 @@ critics = {'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
 from math import sqrt
 
 
-# 선호도 계산(유클리디안)
-# @param prefs 데이터
-# @param person1 사람1
-# @param person2 사람2
-# @return result
-def sim_distance(prefs, person1, person2):
+def sim_distance(data, person1, person2):
+    """
+    선호도 계산(유클리디안)
+
+    @type data: dict
+    @param data: 데이터
+
+    @type person1: 사람1
+    @param person1: 사람1
+
+    @type person2: 사람2
+    @param person2: 사람2
+
+    :return 선호도
+    """
     si = {}
-    for item in prefs[person1]:
-        if item in prefs[person2]:
+    for item in data[person1]:
+        if item in data[person2]:
             si[item] = 1
 
     if len(si) == 0: return 0
-    sum_of_squares = sum([pow(prefs[person1][item] - prefs[person2][item], 2)
-                          for item in prefs[person1] if item in prefs[person2]])
+    sum_of_squares = sum([pow(data[person1][item] - data[person2][item], 2)
+                          for item in data[person1] if item in data[person2]])
     return 1 / (1 + sqrt(sum_of_squares))
 
 
-# 선호도 계산(피어슨)
-# @param prefs 데이터
-# @param person1 사람1
-# @param person2 사람2
-# @return result
-def sim_peason(prefs, p1, p2):
-    si = {}
-    for item in prefs[p1]:
-        if item in prefs[p2]: si[item] = 1
+def sim_peason(data, person1, person2):
+    """
+    선호도 계산(피어슨)
 
-    n = len(si)
+    @type data: dict
+    @param data: 데이터
 
-    if (n == 0): return 0
+    @type person1: 사람1
+    @param person1: 사람1
 
-    sum1 = sum([prefs[p1][it] for it in si])
-    sum2 = sum([prefs[p2][it] for it in si])
+    @type person2: 사람2
+    @param person2: 사람2
 
-    sum1Sq = sum([pow(prefs[p1][it], 2) for it in si])
-    sum2Sq = sum([pow(prefs[p2][it], 2) for it in si])
+    :return 선호도
+    """
 
-    pSum = sum([prefs[p1][it] * prefs[p2][it] for it in si])
+    common = {}
+    for item in data[person1]:
+        if item in data[person2]: common[item] = 1
+
+    n = len(common)
+
+    if n == 0: return 0
+
+    sum1 = sum([data[person1][it] for it in common])
+    sum2 = sum([data[person2][it] for it in common])
+
+    sum1Sq = sum([pow(data[person1][it], 2) for it in common])
+    sum2Sq = sum([pow(data[person2][it], 2) for it in common])
+
+    pSum = sum([data[person1][it] * data[person2][it] for it in common])
 
     num = pSum - (sum1 * sum2 / n)
     den = sqrt((sum1Sq - pow(sum1, 2) / n) * (sum2Sq - pow(sum2, 2) / n))

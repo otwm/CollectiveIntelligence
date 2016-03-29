@@ -23,4 +23,4 @@ print getRecommendations(users, user)[0: 10]
 
 print "================== 유사링크 ==================\n"
 url = getRecommendations(users, user)[0][1]
-topMatches(transformPrefs(users), url)
+print topMatches(transformPrefs(users), url)
