@@ -91,7 +91,7 @@ def sim_peason(data, person1, person2):
     return r
 
 
-def topMatches(prefs, person, n=5, similarity=sim_peason):
+def top_matches(prefs, person, n=5, similarity=sim_peason):
     scores = [(similarity(prefs, person, other), other)
               for other in prefs if other != person]
     scores.sort()
@@ -122,7 +122,7 @@ def getRecommendations(prefs, person, similarity=sim_peason):
     return rankings
 
 
-def transform_data(data):
+def transform_prefs(data):
     """
      데이터를 아이템 기준으로 변경한다.
      @type data: dict
@@ -139,7 +139,7 @@ def transform_data(data):
 
 def calculate_similar_items(data, rank=10):
     """
-     아이템 별로 랭크를 구한다.
+     아이템 별로 유사도를 구한다.
 
      @type data: dict
      @param data: 데이터
@@ -148,14 +148,14 @@ def calculate_similar_items(data, rank=10):
      @param rank: 랭크
     """
     result = {}
-    data_by_item = transform_data(data)
+    data_by_item = transform_prefs(data)
 
     c = 0
     for item in data_by_item:
         c += 1
         if c % 100 == 0:
             print "%d / %d " % (c, len(data_by_item))
-        scores = topMatches(data_by_item, item, n=rank, similarity=sim_distance)
+        scores = top_matches(data_by_item, item, n=rank, similarity=sim_distance)
         result[item] = scores
     return result
 
