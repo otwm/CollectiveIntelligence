@@ -122,11 +122,81 @@ def getRecommendations(prefs, person, similarity=sim_peason):
     return rankings
 
 
-def transformPrefs(prefs):
+def transform_data(data):
+    """
+     데이터를 아이템 기준으로 변경한다.
+     @type data: dict
+     @param data: 데이터
+    """
     result = {}
-    for person in prefs:
-        for item in prefs[person]:
+    for person in data:
+        for item in data[person]:
             result.setdefault(item, {})
-            result[item][person] = prefs[person][item]
+            result[item][person] = data[person][item]
 
+    return result
+
+
+def calculate_similar_items(data, rank=10):
+    """
+     아이템 별로 랭크를 구한다.
+
+     @type data: dict
+     @param data: 데이터
+
+     @type rank: int
+     @param rank: 랭크
+    """
+    result = {}
+    data_by_item = transform_data(data)
+
+    c = 0
+    for item in data_by_item:
+        c += 1
+        if c % 100 == 0:
+            print "%d / %d " % (c, len(data_by_item))
+        scores = topMatches(data_by_item, item, n=rank, similarity=sim_distance)
+        result[item] = scores
+    return result
+
+
+def get_recommended_items(data, item_match, user):
+    """
+     아이템을 추천한다.
+
+     @type data: dict
+     @param data: 데이터
+
+     @type item_match: dict
+     @param item_match: 통계된 정보
+
+     @type user: string
+     @param user: 사용자
+    """
+    user_ratings = data[user]
+    scores = {}
+    total_sim = {}
+
+    for (item, rating) in user_ratings.items():
+        for (similarity, item2) in item_match[item]:
+
+            # 사용자가 이미 평가 했다면, 패스 한다.
+            # 왜냐고? 이미 봤으니까!
+            if item2 in user_ratings:
+                continue
+
+            scores.setdefault(item2, 0)
+            scores[item2] += similarity * rating
+
+            # 도데체 왜?? 이런식으로 구해야 하나?? =ㅅ=?? 알듯 말 듯?
+            total_sim.setdefault(item2, 0)
+            total_sim[item2] += similarity * rating
+
+            total_sim.setdefault(item2, 0)
+            total_sim[item2] += similarity
+
+    result = [(score / total_sim[item], item) for item, score in scores.items()]
+
+    result.sort()
+    result.reverse()
     return result
