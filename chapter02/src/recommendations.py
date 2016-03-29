@@ -200,3 +200,26 @@ def get_recommended_items(data, item_match, user):
     result.sort()
     result.reverse()
     return result
+
+
+def load_movie_lens(path='/home/kdo/dev/PycharmProjects/CollectiveIntelligence/chapter02/resources'):
+    """
+     영화 정보를 로드
+
+     @type path: string
+     @param path: 데이터 경로
+    """
+    movies = {}
+
+    for line in open(path + '/u.item'):
+        (id, title) = line.split('|')[0:2]
+        movies[id] = title
+
+    data = {}
+
+    for line in open(path + '/u.data'):
+        (user, movie_id, rating, ts) = line.split('\t')
+        data.setdefault(user, {})
+        data[user][movies[movie_id]] = float(rating)
+
+    return data
