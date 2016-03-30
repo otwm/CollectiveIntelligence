@@ -43,7 +43,8 @@ def sim_distance(data, person1, person2):
         if item in data[person2]:
             si[item] = 1
 
-    if len(si) == 0: return 0
+    if len(si) == 0:
+        return 0
     sum_of_squares = sum([pow(data[person1][item] - data[person2][item], 2)
                           for item in data[person1] if item in data[person2]])
     return 1 / (1 + sqrt(sum_of_squares))
@@ -71,7 +72,8 @@ def sim_peason(data, person1, person2):
 
     n = len(common)
 
-    if n == 0: return 0
+    if n == 0:
+        return 0
 
     sum1 = sum([data[person1][it] for it in common])
     sum2 = sum([data[person2][it] for it in common])
@@ -84,7 +86,8 @@ def sim_peason(data, person1, person2):
     num = pSum - (sum1 * sum2 / n)
     den = sqrt((sum1Sq - pow(sum1, 2) / n) * (sum2Sq - pow(sum2, 2) / n))
 
-    if den == 0: return 0
+    if den == 0:
+        return 0
 
     r = num / den
 
@@ -122,7 +125,7 @@ def getRecommendations(prefs, person, similarity=sim_peason):
     return rankings
 
 
-def transform_prefs(data):
+def transform_data(data):
     """
      데이터를 아이템 기준으로 변경한다.
      @type data: dict
@@ -148,7 +151,7 @@ def calculate_similar_items(data, rank=10):
      @param rank: 랭크
     """
     result = {}
-    data_by_item = transform_prefs(data)
+    data_by_item = transform_data(data)
 
     c = 0
     for item in data_by_item:
